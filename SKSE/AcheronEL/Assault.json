@@ -1,0 +1,223 @@
+{
+  "Human": {
+    "LeadIn": [
+      "AcheronEL_HumanStruggleA1S1",
+      "AcheronEL_HumanStruggleA2S1"
+    ],
+    "Instant": [
+      "AcheronEL_HumanStruggleA1LieInstant",
+      "AcheronEL_HumanStruggleA2LieInstant"
+    ],
+    "Breakfree": []
+  },
+  "AshHopper": {
+    "Instant": [
+      "AcheronEL_AshHopperStruggle_A1_Start",
+      "AcheronEL_AshHopperStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_AshHopperStruggle_A1_Stop",
+      "AcheronEL_AshHopperStruggle_A2_Stop"
+    ]
+  },
+  "Bear": {
+    "Instant": [
+      "AcheronEL_BearStruggle_A1_Start",
+      "AcheronEL_BearStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_BearStruggle_A1_Stop",
+      "AcheronEL_BearStruggle_A2_Stop"
+    ]
+  },
+  "Chaurus": {
+    "Instant": [
+      "AcheronEL_ChaurusStruggle_A1_Start",
+      "AcheronEL_ChaurusStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_ChaurusStruggle_A1_Stop",
+      "AcheronEL_ChaurusStruggle_A2_Stop"
+    ]
+  },
+  "ChaurusReaper": {
+    "Instant": [
+      "AcheronEL_ChaurusReaperStruggle_A1_Start",
+      "AcheronEL_ChaurusReaperStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_ChaurusReaperStruggle_A1_Stop",
+      "AcheronEL_ChaurusReaperStruggle_A2_Stop"
+    ]
+  },
+  "ChaurusHunter": {
+    "Instant": [
+      "AcheronEL_ChaurusHunterStruggle_A1_Start",
+      "AcheronEL_ChaurusHunterStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_ChaurusHunterStruggle_A1_Stop",
+      "AcheronEL_ChaurusHunterStruggle_A2_Stop"
+    ]
+  },
+  "Draugr": {
+    "Instant": [
+      "AcheronEL_DraugrStruggle_A1_Start",
+      "AcheronEL_DraugrStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_DraugrStruggle_A1_Stop",
+      "AcheronEL_DraugrStruggle_A2_Stop"
+    ]
+  },
+  "DwarvenCenturion": {
+    "Instant": [
+      "AcheronEL_DwarvenCenturionStruggle_A1_Start",
+      "AcheronEL_DwarvenCenturionStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_DwarvenCenturionStruggle_A1_Stop",
+      "AcheronEL_DwarvenCenturionStruggle_A2_Stop"
+    ]
+  },
+  "DwarvenSpider": {
+    "Instant": [
+      "AcheronEL_DwarvenSpiderStruggle_A1_Start",
+      "AcheronEL_DwarvenSpiderStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_DwarvenSpiderStruggle_A1_Stop",
+      "AcheronEL_DwarvenSpiderStruggle_A2_Stop"
+    ]
+  },
+  "Falmer": {
+    "Instant": [
+      "AcheronEL_FalmerStruggle_A1_Start",
+      "AcheronEL_FalmerStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_FalmerStruggle_A1_Stop",
+      "AcheronEL_FalmerStruggle_A2_Stop"
+    ]
+  },
+  "FrostbiteSpider": {
+    "Instant": [
+      "AcheronEL_SpiderStruggle_A1_Start",
+      "AcheronEL_SpiderStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_SpiderStruggle_A1_Stop",
+      "AcheronEL_SpiderStruggle_A2_Stop"
+    ]
+  },
+  "FrostbiteSpiderGiant": {
+    "Instant": [
+      "AcheronEL_GiantSpiderStruggle_A1_Start",
+      "AcheronEL_GiantSpiderStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_GiantSpiderStruggle_A1_Stop",
+      "AcheronEL_GiantSpiderStruggle_A2_Stop"
+    ]
+  },
+  "Gargoyle": {
+    "Instant": [
+      "AcheronEL_GargoyleStruggle_A1_Start",
+      "AcheronEL_GargoyleStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_GargoyleStruggle_A1_Stop",
+      "AcheronEL_GargoyleStruggle_A2_Stop"
+    ]
+  },
+  "Giant": {
+    "Instant": [
+      "AcheronEL_GiantStruggle_A1_Start",
+      "AcheronEL_GiantStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_GiantStruggle_A1_Stop",
+      "AcheronEL_GiantStruggle_A2_Stop"
+    ]
+  },
+  "Netch": {
+    "Instant": [
+      "AcheronEL_NetchStruggle_A1_Start",
+      "AcheronEL_NetchStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_NetchStruggle_A1_Stop",
+      "AcheronEL_NetchStruggle_A2_Stop"
+    ]
+  },
+  "Riekling": {
+    "Instant": [
+      "AcheronEL_RieklingStruggle_A1_Start",
+      "AcheronEL_RieklingStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_RieklingStruggle_A1_Stop",
+      "AcheronEL_RieklingStruggle_A2_Stop"
+    ]
+  },
+  "MountedRiekling": {
+    "Instant": [
+      "AcheronEL_BoarRieklingStruggle_A1_Start",
+      "AcheronEL_BoarRieklingStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_BoarRieklingStruggle_A1_Stop",
+      "AcheronEL_BoarRieklingStruggle_A2_Stop"
+    ]
+  },
+  "SabreCat": {
+    "Instant": [
+      "AcheronEL_SabrecatStruggle_A1_Start",
+      "AcheronEL_SabrecatStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_SabrecatStruggle_A1_Stop",
+      "AcheronEL_SabrecatStruggle_A2_Stop"
+    ]
+  },
+  "Skeever": {
+    "Instant": [
+      "AcheronEL_SkeeverStruggle_A1_Start",
+      "AcheronEL_SkeeverStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_SkeeverStruggle_A1_Stop",
+      "AcheronEL_SkeeverStruggle_A2_Stop"
+    ]
+  },
+  "Troll": {
+    "Instant": [
+      "AcheronEL_TrollStruggle_A1_Start",
+      "AcheronEL_TrollStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_TrollStruggle_A1_Stop",
+      "AcheronEL_TrollStruggle_A2_Stop"
+    ]
+  },
+  "Werewolf": {
+    "Instant": [
+      "AcheronEL_WerewolfStruggle_A1_Start",
+      "AcheronEL_WerewolfStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_WerewolfStruggle_A1_Stop",
+      "AcheronEL_WerewolfStruggle_A2_Stop"
+    ]
+  },
+  "Wolf": {
+    "Instant": [
+      "AcheronEL_WolfStruggle_A1_Start",
+      "AcheronEL_WolfStruggle_A2_Start"
+    ],
+    "Breakfree": [
+      "AcheronEL_WolfStruggle_A1_Stop",
+      "AcheronEL_WolfStruggle_A2_Stop"
+    ]
+  }
+}
