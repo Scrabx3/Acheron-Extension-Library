@@ -107,20 +107,52 @@ Event OnUpdate()
   MakeEventAndClose()
 EndEvent
 
+Event OnCellDetach()
+  MakeEventAndClose()
+EndEvent
+
 Function MakeEventAndClose()
   Actor aggressor = GetReference() as Actor
-  
-  int handle = ModEvent.Create(_callback)
-  ModEvent.PushForm(handle, _victim)
-  ModEvent.PushForm(handle, GetReference())
-  ModEvent.PushBool(handle, _victorious)
-  ModEvent.Send(handle)
-
+  If(_victorious)
+    If(anim_breakfree.Length)
+      Debug.SendAnimationEvent(_victim, anim_breakfree[0])
+      Debug.SendAnimationEvent(aggressor, anim_breakfree[1])
+      Utility.Wait(2.3)
+    Else
+      Debug.SendAnimationEvent(_victim, "IdleForceDefaultState")
+      Debug.SendAnimationEvent(aggressor, "StaggerStart")
+    EndIf
+    String rt = Acheron.GetRaceType(aggressor)
+    If(rt == "Human")
+      ; nothing
+    ElseIf(rt == "Skeever" || rt == "Wolf")
+      _victim.PushActorAway(aggressor, 5.00000)
+    ElseIf(rt == "Riekling" || rt == "DwarvenSpider")
+      _victim.PushActorAway(aggressor, 3.50000)
+    ElseIf(rt == "FrostbiteSpider" || rt == "Falmer" || rt == "Draugr")
+      _victim.PushActorAway(aggressor, 2.00000)
+    ElseIf(rt == "Sabrecat" || rt == "Gargoyle")
+      _victim.PushActorAway(aggressor, 1.00000)
+    ElseIf(rt == "Bear" || rt == "Werewolf" || rt == "Chaurus" || rt == "ChaurusReaper" || rt == "ChaurusHunter")
+      _victim.PushActorAway(aggressor, 0.500000)
+    Else ; If(rt == "Troll" || rt == "Giant")
+      _victim.PushActorAway(aggressor, 0.200000)
+    EndIf
+  Else
+    Debug.SendAnimationEvent(_victim, "StaggerStart")
+    Debug.SendAnimationEvent(aggressor, "IdleForceDefaultState")
+  EndIf
   Restrain(aggressor, false)
   Restrain(_victim, false)
   aggressor.SetVehicle(none)
   _victim.SetVehicle(none)
   Clear()
+
+  int handle = ModEvent.Create(_callback)
+  ModEvent.PushForm(handle, _victim)
+  ModEvent.PushForm(handle, aggressor)
+  ModEvent.PushBool(handle, _victorious)
+  ModEvent.Send(handle)
 EndFunction
 
 Function Restrain(Actor akActor, bool abRestrain)
