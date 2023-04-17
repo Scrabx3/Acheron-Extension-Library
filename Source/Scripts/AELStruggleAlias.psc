@@ -27,14 +27,13 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
   akAggressor.StopCombat()
   akVictim.StopCombat()
 
-  ObjectReference vehicle = akVictim.PlaceAtMe(xMarker)
-  akAggressor.SetVehicle(vehicle)
-  akVictim.SetVehicle(vehicle)
-  Utility.Wait(0.1)
-  ; Victim will be done translating before aggressor
+  akAggressor.SetVehicle(akVictim.PlaceAtMe(xMarker))
+  akVictim.SetVehicle(akVictim.PlaceAtMe(xMarker))
+  Utility.Wait(0.3)
   create_callback = -1
-  akAggressor.TranslateToRef(vehicle, 250.0)
-  akVictim.TranslateToRef(vehicle, 250.0)
+  akAggressor.TranslateToRef(akVictim, 150.0)
+  ; Translate to doesnt work on the player, so gotta set the angle manually
+  akAggressor.SetAngle(akVictim.GetAngleX(), akVictim.GetAngleY(), akVictim.GetAngleZ())
   If(akAggressor.IsSneaking())
     akAggressor.StartSneaking()
   EndIf
@@ -57,13 +56,13 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
   If(!anims.Length || (anim_leadin.Length && akVictim.IsBleedingOut() || Acheron.IsDefeated(akVictim)))
     anims = anim_leadin
   EndIf
-  Debug.SendAnimationEvent(akAggressor, anims[0])
-  Debug.SendAnimationEvent(akVictim, anims[1])
+  Debug.SendAnimationEvent(akAggressor, anims[1])
+  Debug.SendAnimationEvent(akVictim, anims[0])
 
   If(afDuration <= 0.025 && afDuration >= 0.0)
     Actor PlayerRef = Game.GetPlayer()
     If(akAggressor == PlayerRef || akVictim == PlayerRef)
-      If(Acheron.OpenCustomMenu("AcheronEL\\AcheronQTE"))
+      If(Acheron.OpenCustomMenu("AcheronEL\\AcheronEL_QTE"))
         int handle = UICallback.Create("AcheronCustomMenu", "_root.main.beginGame")
         If(handle)
           UICallback.PushFloat(handle, afDifficulty)
@@ -93,6 +92,7 @@ Event OnTranslationFailed()
 EndEvent
 
 Event OnGameEnd(string asEventName, string asStringArg, float afNumArg, form akSender)
+  Debug.Trace("OnGameEnd, afNumArg: " + afNumArg)
   UnregisterForModEvent("AEL_GameEnd")
   bool player_won = afNumArg > 0
   If(_victim == Game.GetPlayer())
@@ -115,8 +115,8 @@ Function MakeEventAndClose()
   Actor aggressor = GetReference() as Actor
   If(_victorious)
     If(anim_breakfree.Length)
-      Debug.SendAnimationEvent(_victim, anim_breakfree[0])
-      Debug.SendAnimationEvent(aggressor, anim_breakfree[1])
+      Debug.SendAnimationEvent(_victim, anim_breakfree[1])
+      Debug.SendAnimationEvent(aggressor, anim_breakfree[0])
       Utility.Wait(2.3)
     Else
       Debug.SendAnimationEvent(_victim, "IdleForceDefaultState")
