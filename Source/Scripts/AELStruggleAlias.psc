@@ -139,7 +139,11 @@ Function MakeEventAndClose()
       _victim.PushActorAway(aggressor, 0.200000)
     EndIf
   Else
-    Debug.SendAnimationEvent(_victim, "StaggerStart")
+    String anim = "IdleForceDefaultState"
+    If(Acheron.IsDefeated(_victim))
+      anim = "bleedoutStart"
+    EndIf
+    Debug.SendAnimationEvent(_victim, anim)
     Debug.SendAnimationEvent(aggressor, "IdleForceDefaultState")
   EndIf
   Restrain(aggressor, false)
