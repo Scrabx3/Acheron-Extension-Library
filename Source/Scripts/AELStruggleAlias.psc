@@ -13,7 +13,6 @@ Actor _victim
 String _callback
 bool _victorious
 
-int create_callback
 bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float afDifficulty = 0.0, float afDuration = 0.0)
   If(!DefineAnimations(akAggressor))
     Debug.Trace("[AEL] No struggle animation for actor [" + akAggressor + "]", 1)
@@ -66,13 +65,6 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
   Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
   return true
 EndFunction
-
-Event OnTranslationComplete()
-  create_callback = 1
-EndEvent
-Event OnTranslationFailed()
-  create_callback = 2
-EndEvent
 
 Event OnGameEnd(string asEventName, string asStringArg, float afNumArg, form akSender)
   Debug.Trace("OnGameEnd, afNumArg: " + afNumArg)
@@ -182,3 +174,8 @@ Function Clear()
   Parent.Clear()
   VictimAlias.Clear()
 EndFunction
+
+
+; REDUNDANT
+
+int create_callback
