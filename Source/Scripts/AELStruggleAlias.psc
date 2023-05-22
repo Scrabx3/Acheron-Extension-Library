@@ -27,37 +27,17 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
   akAggressor.StopCombat()
   akVictim.StopCombat()
 
-  akAggressor.SetVehicle(akVictim.PlaceAtMe(xMarker))
-  akVictim.SetVehicle(akVictim.PlaceAtMe(xMarker))
-  Utility.Wait(0.3)
-  create_callback = -1
-  akAggressor.TranslateToRef(akVictim, 150.0)
-  ; Translate to doesnt work on the player, so gotta set the angle manually
-  akAggressor.SetAngle(akVictim.GetAngleX(), akVictim.GetAngleY(), akVictim.GetAngleZ())
-  If(akAggressor.IsSneaking())
-    akAggressor.StartSneaking()
-  EndIf
-  If(akVictim.IsSneaking())
-    akVictim.StartSneaking()
-  EndIf
-  While(create_callback == -1)
-    Utility.Wait(0.1)
-  EndWhile
-  If(create_callback == 2)
-    Restrain(akAggressor, false)
-    Restrain(akVictim, false)
-    akAggressor.SetVehicle(none)
-    akVictim.SetVehicle(none)
-    Clear()
-    return false
-  EndIf
-  ; Victim & aggressor now on top of each other
+  ObjectReference ref = akAggressor.PlaceAtMe(xMarker)
+  akAggressor.MoveTo(akVictim)
+  akVictim.SetVehicle(ref)
+  akAggressor.SetVehicle(ref)
+
   String[] anims = anim_instant
-  If(!anims.Length || (anim_leadin.Length && akVictim.IsBleedingOut() || Acheron.IsDefeated(akVictim)))
+  If(!anims.Length || (anim_leadin.Length && akVictim.IsBleedingOut() || Acheron.IsDefeated(akVictim)) && anim_leadin.Length)
     anims = anim_leadin
   EndIf
-  Debug.SendAnimationEvent(akAggressor, anims[1])
   Debug.SendAnimationEvent(akVictim, anims[0])
+  Debug.SendAnimationEvent(akAggressor, anims[1])
 
   If(afDuration <= 0.025 && afDuration >= 0.0)
     Actor PlayerRef = Game.GetPlayer()
@@ -69,6 +49,7 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
           UICallback.PushBool(handle, Game.UsingGamepad())
           If(UICallback.Send(handle))
             RegisterForModEvent("AEL_GameEnd", "OnGameEnd")
+            Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
             return true
           EndIf
         EndIf
@@ -77,10 +58,12 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
     EndIf
     afDuration = DefaultDuration
   ElseIf(afDuration < 0)
+    Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
     return true
   EndIf
   _victorious = Utility.RandomFloat(0, 99.9) < afDifficulty
   RegisterForSingleUpdate(afDuration)
+  Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
   return true
 EndFunction
 
@@ -115,8 +98,8 @@ Function MakeEventAndClose()
   Actor aggressor = GetReference() as Actor
   If(_victorious)
     If(anim_breakfree.Length)
-      Debug.SendAnimationEvent(_victim, anim_breakfree[1])
-      Debug.SendAnimationEvent(aggressor, anim_breakfree[0])
+      Debug.SendAnimationEvent(_victim, anim_breakfree[0])
+      Debug.SendAnimationEvent(aggressor, anim_breakfree[1])
       Utility.Wait(2.3)
     Else
       Debug.SendAnimationEvent(_victim, "IdleForceDefaultState")
@@ -144,7 +127,12 @@ Function MakeEventAndClose()
       anim = "bleedoutStart"
     EndIf
     Debug.SendAnimationEvent(_victim, anim)
+    Debug.SendAnimationEvent(aggressor, "ReturnDefaultState")
+    Debug.SendAnimationEvent(aggressor, "ReturnToDefault")
+    Debug.SendAnimationEvent(aggressor, "IdleReturnToDefault")
+    Debug.SendAnimationEvent(aggressor, "forceFurnExit")
     Debug.SendAnimationEvent(aggressor, "IdleForceDefaultState")
+    Debug.SendAnimationEvent(aggressor, "reset")
   EndIf
   Restrain(aggressor, false)
   Restrain(_victim, false)
