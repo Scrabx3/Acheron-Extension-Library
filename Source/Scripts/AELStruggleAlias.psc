@@ -23,8 +23,8 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
   ForceRefTo(akAggressor)
   Restrain(akAggressor, true)
   Restrain(akVictim, true)
-  akAggressor.StopCombat()
-  akVictim.StopCombat()
+  ClearActorState(akAggressor)
+  ClearActorState(akVictim)
 
   ObjectReference ref = akAggressor.PlaceAtMe(xMarker)
   akAggressor.MoveTo(akVictim)
@@ -145,6 +145,15 @@ Function Restrain(Actor akActor, bool abRestrain)
   Else
     akActor.SetRestrained(abRestrain)
   EndIf
+EndFunction
+
+Function ClearActorState(Actor akActor)
+  akActor.StopCombat()
+  akActor.SheatheWeapon()
+	If (akActor.IsSneaking())
+		akActor.StartSneaking()
+  EndIf
+  akActor.ClearKeepOffsetFromActor()
 EndFunction
 
 bool Function DefineAnimations(Actor akAggressor)
