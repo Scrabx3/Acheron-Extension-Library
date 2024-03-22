@@ -7,7 +7,7 @@
     Package="false"
     Zip="true">
     <Variables>
-        <Variable Name="ModName" Value="Acheron Extension Library"/>
+        <Variable Name="ModName" Value="Quick Timer Ressource"/>
         <Variable Name="ThisProject" Value="."/>
         <Variable Name="Rel" Value=".\.release"/>
         <Variable Name="MO2" Value=".."/>
@@ -19,6 +19,7 @@
         <Import>@MO2\SkyUI SDK\Source\Scripts</Import>
         <Import>@MO2\Acheron\Source\Scripts</Import>
         <Import>@MO2\JContainers SE\Source\Scripts</Import>
+        <Import>@MO2\Papyrus Extender\Source\Scripts</Import>
         <!-- Base Game -->
         <Import>C:\Program Files (x86)\Steam\steamapps\common\Skyrim Special Edition\Data\Source\Scripts</Import>
     </Imports>
@@ -27,13 +28,19 @@
     </Folders>
     <ZipFiles Output="@Rel">
         <ZipFile Name="@ModName - @Ver" RootDir="@ThisProject" Compression="deflate">
-        	<Include>AcheronExtensionLibrary.esp</Include>
+        	<Include>*.esp</Include>
             <Include>Interface</Include>
             <Include>Scripts</Include>
             <Include>meshes</Include>
             <Include>SKSE</Include>
-            <Include>README.md</Include>
-            <Include>LICENSE</Include>
+            <Include>Source</Include>
+        </ZipFile>
+    </ZipFiles>
+    <ZipFiles Output="@Rel">
+        <ZipFile Name="@ModName - @Ver - Light" RootDir="@ThisProject" Compression="deflate">
+        	<Include>*.esp</Include>
+            <Include>Interface</Include>
+            <Include>Scripts</Include>
             <Include>Source</Include>
         </ZipFile>
     </ZipFiles>

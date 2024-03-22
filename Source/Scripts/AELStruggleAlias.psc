@@ -32,7 +32,7 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
   akAggressor.SetVehicle(ref)
 
   String[] anims = anim_instant
-  If(!anims.Length || (anim_leadin.Length && akVictim.IsBleedingOut() || Acheron.IsDefeated(akVictim)) && anim_leadin.Length)
+  If(!anims.Length || (anim_leadin.Length && akVictim.IsBleedingOut() || akVictim.IsBleedingOut()) && anim_leadin.Length)
     anims = anim_leadin
   EndIf
   Debug.SendAnimationEvent(akVictim, anims[0])
@@ -41,19 +41,13 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
   If(afDuration <= 0.025 && afDuration >= 0.0)
     Actor PlayerRef = Game.GetPlayer()
     If(akAggressor == PlayerRef || akVictim == PlayerRef)
-      If(Acheron.OpenCustomMenu("AcheronEL\\AcheronEL_QTE"))
-        int handle = UICallback.Create("AcheronCustomMenu", "_root.main.beginGame")
-        If(handle)
-          UICallback.PushFloat(handle, afDifficulty)
-          UICallback.PushBool(handle, Game.UsingGamepad())
-          If(UICallback.Send(handle))
-            RegisterForModEvent("AEL_GameEnd", "OnGameEnd")
-            Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
-            return true
-          EndIf
-        EndIf
+      If(!AELStruggle.MakeGame(afDifficulty))
+        Debug.Messagebox("Failed to create flash game. Falling back to timed event")
+        return false
       EndIf
-      Debug.Messagebox("Failed to create flash game. Falling back to timed event")
+      RegisterForModEvent("AEL_GameEnd", "OnGameEnd")
+      Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
+      return true
     EndIf
     afDuration = DefaultDuration
   ElseIf(afDuration < 0)
@@ -67,8 +61,9 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
 EndFunction
 
 Event OnGameEnd(string asEventName, string asStringArg, float afNumArg, form akSender)
-  Debug.Trace("OnGameEnd, afNumArg: " + afNumArg)
+  Debug.Trace("[AEL] OnGameEnd, afNumArg: " + afNumArg)
   UnregisterForModEvent("AEL_GameEnd")
+  SPE_Interface.CloseCustomMenu()
   bool player_won = afNumArg > 0
   If(_victim == Game.GetPlayer())
     _victorious = player_won
@@ -97,7 +92,7 @@ Function MakeEventAndClose()
       Debug.SendAnimationEvent(_victim, "IdleForceDefaultState")
       Debug.SendAnimationEvent(aggressor, "StaggerStart")
     EndIf
-    String rt = Acheron.GetRaceType(aggressor)
+    String rt = SPE_Actor.GetRaceType(aggressor)
     If(rt == "Human")
       ; nothing
     ElseIf(rt == "Skeever" || rt == "Wolf")
@@ -115,7 +110,7 @@ Function MakeEventAndClose()
     EndIf
   Else
     String anim = "IdleForceDefaultState"
-    If(Acheron.IsDefeated(_victim))
+    If(SKSE.GetPluginVersion("Acheron") > -1 && AELAcheron.IsDefeated(_victim))
       anim = "bleedoutStart"
     EndIf
     Debug.SendAnimationEvent(_victim, anim)
@@ -157,8 +152,8 @@ Function ClearActorState(Actor akActor)
 EndFunction
 
 bool Function DefineAnimations(Actor akAggressor)
-  String type = Acheron.GetRaceType(akAggressor)
-  int file = JValue.zeroLifetime(JValue.readFromFile("Data\\SKSE\\AcheronEL\\Assault.json"))
+  String type = SPE_Actor.GetRaceType(akAggressor)
+  int file = JValue.zeroLifetime(JValue.readFromFile("Data\\SKSE\\QTRessource\\Animations.json"))
   int root = JMap.getObj(file, type)
   anim_leadin = jObjToArray(root, "LeadIn")
   anim_instant = jObjToArray(root, "Instant")
