@@ -25,21 +25,41 @@ bool Function MakeGame(float afDifficulty = 70.0) global
   return true
 EndFunction
 
+; Create start an animation between the two actors, using the given animation files, starting the QTE while said animation plays (iff the player is involved)
+; --- Params:
+; akFst, akSnd:     The actorst o animate
+; asAnim1, asAnim2: The animations to use (akFst will use asAnim1)
+; asCallback:       A callback event to use with ModEvent.Send(), Function signature given below
+; afDifficulty:     Difficulty for the victim to escape, between 0 and 100. NPC: RNG check, Player: See MakeGame()
+; afDuration:       Struggle duration; Negative plays until unload. 0 is default. If player is participating, anything other than 0 will only play the animation
+bool Function MakeAnimation(Actor akFst, Actor akSnd, String asAnim1, String asAnim2, String asCallback, float afDifficulty = 0.0, float afDuration = 0.0)
+  If(!akFst || !akSnd || !asCallback || asAnim1 ==  "" && asAnim2 == "")
+    Debug.Trace("[AEL] Invalid Parameter/s [" + akFst + ", " + akSnd + "]", 2)
+    return false
+  ElseIf(akFst.HasKeyword(StruggleKywd) || akSnd.HasKeyword(StruggleKywd))
+    Debug.Trace("[AEL] Actor is already in animation [" + akFst + ", " + akSnd + "]", 2)
+    return false
+  EndIf
+  AELStruggleAlias slot = GetEmptySlot()
+  If(!slot)
+    Debug.Trace("[AEL] Unable to find empty slot to animate [" + akFst + ", " + akSnd + "]", 2)
+    return false
+  EndIf
+  return slot.CreateEx(akFst, akSnd, asAnim1, asAnim2, asCallback, afDifficulty, afDuration)
+EndFunction
+
 ; Create a struggle between akAggressor and akVictim with the specified parameters
-; NOTE: This requires the full version. If the user installed the "Light" version of this mod, this will ALWAYS fail
 ; This will also fail if akAggressor is a creature that has no animations available
 ; --- Params:
-; akAggressor:  The actor attacking (choking) the victim
-; akVictim:     The actor being attacked. MUST be a NPC (human)
-; asCallback:   A callback event to use with ModEvent.Send(), Function signature given below
-; afDifficulty: Difficulty for the victim to escape, between 0 and 100. NPC: RNG check, Player: See MakeGame()
-; afDuration:   Struggle duration; Negative plays until unload. 0 is default. If player is participating, anything other than 0 will only play the animation
+; akAggressor:                          The actor attacking (choking) the victim
+; akVictim:                             The actor being attacked. MUST be a NPC (human)
+; asCallback, afDifficulty, afDuration: See MakeAnimation()
 bool Function MakeStruggle(Actor akAggressor, Actor akVictim, String asCallback, float afDifficulty = 70.0, float afDuration = 0.0)
   If(!akAggressor || !akVictim || !asCallback)
     Debug.Trace("[AEL] Invalid Parameter/s [" + akAggressor + ", " + akVictim + "]", 2)
     return false
   ElseIf(akAggressor.HasKeyword(StruggleKywd) || akVictim.HasKeyword(StruggleKywd))
-    Debug.Trace("[AEL] Actor is already struggling [" + akAggressor + ", " + akVictim + "]", 2)
+    Debug.Trace("[AEL] Actor is already  in animation [" + akAggressor + ", " + akVictim + "]", 2)
     return false
   ElseIf(SPE_Actor.GetRaceType(akVictim) != "Human")
     Debug.Trace("[AEL] Victim Actor must be 'Human' but is '" + SPE_Actor.GetRaceType(akVictim) + "' [" + akAggressor + ", " + akVictim + "]", 2)
@@ -52,6 +72,7 @@ bool Function MakeStruggle(Actor akAggressor, Actor akVictim, String asCallback,
   EndIf
   return slot.Create(akAggressor, akVictim, asCallback, afDifficulty, afDuration)
 EndFunction
+
 ; Function signature for the callback. Listen to this using RegisterForModEvent(asCallback, OnStruggleEnd)
 Event OnStruggleEnd(Form akVictim, Form akAggressor, bool abVictimEscaped)
 EndEvent

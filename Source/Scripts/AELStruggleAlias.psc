@@ -18,45 +18,50 @@ bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float
     Debug.Trace("[AEL] No struggle animation for actor [" + akAggressor + "]", 1)
     return false
   EndIf
-  _callback = asCallback
-  _victim = akVictim
-  ForceRefTo(akAggressor)
-  Restrain(akAggressor, true)
-  Restrain(akVictim, true)
-  ClearActorState(akAggressor)
-  ClearActorState(akVictim)
-
-  ObjectReference ref = akAggressor.PlaceAtMe(xMarker)
-  akAggressor.MoveTo(akVictim)
-  akVictim.SetVehicle(ref)
-  akAggressor.SetVehicle(ref)
 
   String[] anims = anim_instant
   If(!anims.Length || (anim_leadin.Length && akVictim.IsBleedingOut() || akVictim.IsBleedingOut()) && anim_leadin.Length)
     anims = anim_leadin
   EndIf
-  Debug.SendAnimationEvent(akVictim, anims[0])
-  Debug.SendAnimationEvent(akAggressor, anims[1])
+  return CreateEx(akAggressor, akVictim, anims[0], anims[1], asCallback, afDifficulty, afDuration)
+EndFunction
+
+bool Function CreateEx(Actor akFst, Actor akSnd, String asAnim1, String asAnim2, String asCallback, float afDifficulty, float afDuration)
+  _callback = asCallback
+  _victim = akSnd
+  ForceRefTo(akFst)
+  Restrain(akFst, true)
+  Restrain(akSnd, true)
+  ClearActorState(akFst)
+  ClearActorState(akSnd)
+
+  ObjectReference ref = akFst.PlaceAtMe(xMarker)
+  akFst.MoveTo(akSnd)
+  akSnd.SetVehicle(ref)
+  akFst.SetVehicle(ref)
+
+  Debug.SendAnimationEvent(akSnd, asAnim1)
+  Debug.SendAnimationEvent(akFst, asAnim2)
 
   If(afDuration <= 0.025 && afDuration >= 0.0)
     Actor PlayerRef = Game.GetPlayer()
-    If(akAggressor == PlayerRef || akVictim == PlayerRef)
+    If(akFst == PlayerRef || akSnd == PlayerRef)
       If(!AELStruggle.MakeGame(afDifficulty))
         Debug.Messagebox("Failed to create flash game. Falling back to timed event")
         return false
       EndIf
       RegisterForModEvent("AEL_GameEnd", "OnGameEnd")
-      Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
+      Debug.Trace("[AEL] Successfully started struggle between victim [" + akSnd + "] and aggressor [" + akFst + "]", 0)
       return true
     EndIf
     afDuration = DefaultDuration
   ElseIf(afDuration < 0)
-    Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
+    Debug.Trace("[AEL] Successfully started struggle between victim [" + akSnd + "] and aggressor [" + akFst + "]", 0)
     return true
   EndIf
   _victorious = Utility.RandomFloat(0, 99.9) < afDifficulty
   RegisterForSingleUpdate(afDuration)
-  Debug.Trace("[AEL] Successfully started struggle between victim [" + akVictim + "] and aggressor [" + akAggressor + "]", 0)
+  Debug.Trace("[AEL] Successfully started struggle between victim [" + akSnd + "] and aggressor [" + akFst + "]", 0)
   return true
 EndFunction
 
