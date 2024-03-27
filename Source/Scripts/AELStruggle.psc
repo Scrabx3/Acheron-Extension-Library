@@ -50,6 +50,7 @@ EndFunction
 
 ; Create a struggle between akAggressor and akVictim with the specified parameters
 ; This will also fail if akAggressor is a creature that has no animations available
+; NOTE: Using this function *requires* the full version of the mod to be installed (as only that version includes the animations)
 ; --- Params:
 ; akAggressor:                          The actor attacking (choking) the victim
 ; akVictim:                             The actor being attacked. MUST be a NPC (human)
