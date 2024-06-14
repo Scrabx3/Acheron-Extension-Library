@@ -13,6 +13,8 @@ Actor _victim
 String _callback
 bool _victorious
 
+bool _continusesetup
+
 bool Function Create(Actor akAggressor, Actor akVictim, String asCallback, float afDifficulty = 0.0, float afDuration = 0.0)
   If(!DefineAnimations(akAggressor))
     Debug.Trace("[AEL] No struggle animation for actor [" + akAggressor + "]", 1)
@@ -29,30 +31,36 @@ EndFunction
 bool Function CreateEx(Actor akFst, Actor akSnd, String asAnim1, String asAnim2, String asCallback, float afDifficulty, float afDuration)
   _callback = asCallback
   _victim = akSnd
+  _continusesetup = false
   ForceRefTo(akFst)
-  Restrain(akFst, true)
-  Restrain(akSnd, true)
   ClearActorState(akFst)
   ClearActorState(akSnd)
-
+  Restrain(akFst, true)
+  Restrain(akSnd, true)
   ObjectReference ref = akFst.PlaceAtMe(xMarker)
-  akFst.MoveTo(akSnd)
+  akFst.SetAngle(akSnd.GetAngleX(), akSnd.GetAngleY(), akSnd.GetAngleZ())
+  akFst.SplineTranslateToRef(akSnd, 1.3, 150.0)
   akSnd.SetVehicle(ref)
   akFst.SetVehicle(ref)
+
+  ; While (!_continusesetup)
+  ;   Utility.Wait(0.1)
+  ; EndWhile
 
   Debug.SendAnimationEvent(akSnd, asAnim1)
   Debug.SendAnimationEvent(akFst, asAnim2)
 
+  Utility.Wait(1.2)
+
   If(afDuration <= 0.025 && afDuration >= 0.0)
     Actor PlayerRef = Game.GetPlayer()
     If(akFst == PlayerRef || akSnd == PlayerRef)
-      If(!AELStruggle.MakeGame(afDifficulty))
-        Debug.Messagebox("Failed to create flash game. Falling back to timed event")
-        return false
+      If(AELStruggle.MakeGame(afDifficulty))
+        RegisterForModEvent("AEL_GameEnd", "OnGameEnd")
+        Debug.Trace("[AEL] Successfully started struggle between victim [" + akSnd + "] and aggressor [" + akFst + "]", 0)
+        return true
       EndIf
-      RegisterForModEvent("AEL_GameEnd", "OnGameEnd")
-      Debug.Trace("[AEL] Successfully started struggle between victim [" + akSnd + "] and aggressor [" + akFst + "]", 0)
-      return true
+      Debug.Messagebox("Failed to create flash game. Falling back to timed event")
     EndIf
     afDuration = DefaultDuration
   ElseIf(afDuration < 0)
@@ -132,6 +140,9 @@ Function MakeEventAndClose()
   _victim.SetVehicle(none)
   Clear()
 
+  If (!_callback)
+    return
+  EndIf
   int handle = ModEvent.Create(_callback)
   ModEvent.PushForm(handle, _victim)
   ModEvent.PushForm(handle, aggressor)
@@ -184,7 +195,6 @@ Function Clear()
   VictimAlias.Clear()
 EndFunction
 
-
-; REDUNDANT
-
-int create_callback
+Event OnTranslationComplete()
+  _continusesetup = true
+EndEvent
