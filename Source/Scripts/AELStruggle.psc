@@ -9,7 +9,7 @@ EndFunction
 ; Listen for "AEL_GameEnd("", "", afVictory, none)" to receive the game result
 ; afDifficulty is a value between 0 and 100. Higher is easier, 70 is default difficulty, below 20 becomes humanly impossible
 bool Function MakeGame(float afDifficulty = 70.0) global
-  If (!SPE_Interface.OpenCustomMenu("QTRessource\\QuickTimeRessource_Game.swf"))
+  If (!SPE_Interface.OpenCustomMenu("AELStruggling\\AELStruggling_Game"))
     Debug.Trace("[AEL] Failed to open custom menu")
     return false
   EndIf
